@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Assert;
 
 import java.lang.all;
-import tango.text.convert.Format;
 
 /**
  * A concrete status implementation, suitable either for
