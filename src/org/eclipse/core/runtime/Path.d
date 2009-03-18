@@ -21,10 +21,6 @@ import java.lang.all;
 
 import tango.io.model.IFile;
 
-
-static import tango.text.Text;
-alias tango.text.Text.Text!(char) StringBuffer;
-
 /**
  * The standard implementation of the <code>IPath</code> interface.
  * Paths are always maintained in canonicalized form.  That is, parent
