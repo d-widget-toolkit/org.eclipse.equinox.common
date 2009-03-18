@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IStatus;
 // import java.io.PrintWriter;
 
 import java.lang.all;
-import tango.io.Stdout;
 
 /**
  * A checked exception representing a failure.
@@ -85,17 +84,17 @@ public class CoreException : Exception {
      */
     public void printStackTrace() {
 //         printStackTrace(System.err);
-        Stderr.formatln( "Exception in File {}({}): {}", this.file, this.line, this.msg );
+        getDwtLogger.error( __FILE__, __LINE__, "Exception in File {}({}): {}", this.file, this.line, this.msg );
         foreach( msg; this.info ){
-            Stderr.formatln( "    trc: {}", msg );
+            getDwtLogger.error( __FILE__, __LINE__, "    trc: {}", msg );
         }
         if (status.getException() !is null) {
-            Stderr.formatln( "{}[{}]: ", this.classinfo.name, status.getCode() ); //$NON-NLS-1$ //$NON-NLS-2$
+            getDwtLogger.error( __FILE__, __LINE__, "{}[{}]: ", this.classinfo.name, status.getCode() ); //$NON-NLS-1$ //$NON-NLS-2$
 //             status.getException().printStackTrace();
                 auto e = status.getException();
-                Stderr.formatln( "Exception in File {}({}): {}", e.file, e.line, e.msg );
+                getDwtLogger.error( __FILE__, __LINE__, "Exception in File {}({}): {}", e.file, e.line, e.msg );
                 foreach( msg; e.info ){
-                    Stderr.formatln( "    trc: {}", msg );
+                    getDwtLogger.error( __FILE__, __LINE__, "    trc: {}", msg );
                 }
         }
     }
