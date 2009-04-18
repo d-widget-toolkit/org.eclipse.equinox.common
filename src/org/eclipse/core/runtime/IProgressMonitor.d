@@ -13,6 +13,7 @@
 module org.eclipse.core.runtime.IProgressMonitor;
 
 import java.lang.all;
+import java.lang.String;
 
 /**
  * The <code>IProgressMonitor</code> interface is implemented
