@@ -79,8 +79,11 @@ public final class Assert {
     public static void isNotNull(Object object) {
         isNotNull(object, ""); //$NON-NLS-1$
     }
-    public static void isNotNull(String object) {
-        isTrue(object.ptr !is null); //$NON-NLS-1$
+    public static void isNotNull(String str) {
+        isTrue(str.ptr !is null); //$NON-NLS-1$
+    }
+    public static void isNotNull(void* ptr) {
+        isTrue(ptr !is null); //$NON-NLS-1$
     }
 
     /** Asserts that the given object is not <code>null</code>. If this
@@ -93,6 +96,12 @@ public final class Assert {
     public static void isNotNull(Object object, String message) {
         if (object is null)
             throw new AssertionFailedException("null argument:" ~ message); //$NON-NLS-1$
+    }
+    public static void isNotNull(String str, String message) {
+        isTrue(str.ptr !is null, message ); //$NON-NLS-1$
+    }
+    public static void isNotNull(void* ptr, String message) {
+        isTrue(ptr !is null, message ); //$NON-NLS-1$
     }
 
     /** Asserts that the given bool is <code>true</code>. If this
