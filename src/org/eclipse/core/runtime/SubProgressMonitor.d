@@ -4,22 +4,22 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.SubProgressMonitor;
-
-import org.eclipse.core.runtime.ProgressMonitorWrapper;
-import org.eclipse.core.runtime.IProgressMonitor;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeSubProgressMonitor;
 
 import java.lang.all;
 
+import org.eclipse.core.runtimeIProgressMonitor; // packageimport
+import org.eclipse.core.runtimeProgressMonitorWrapper; // packageimport
+
 /**
  * For new implementations consider using {@link SubMonitor}.
- *
+ * 
  * A progress monitor that uses a given amount of work ticks
  * from a parent monitor. It can be used as follows:
  * <pre>
@@ -43,7 +43,7 @@ import java.lang.all;
  * </p><p>
  * This class may be instantiated or subclassed by clients.
  * </p>
- *
+ * 
  * @see SubMonitor
  */
 public class SubProgressMonitor : ProgressMonitorWrapper {
@@ -54,14 +54,14 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
      *
      * @see #SubProgressMonitor(IProgressMonitor,int,int)
      */
-    public static const int SUPPRESS_SUBTASK_LABEL = 1 << 1;
+    public static final int SUPPRESS_SUBTASK_LABEL = 1 << 1;
     /**
-     * Style constant indicating that the main task label
+     * Style constant indicating that the main task label 
      * should be prepended to the subtask label.
      *
      * @see #SubProgressMonitor(IProgressMonitor,int,int)
      */
-    public static const int PREPEND_MAIN_LABEL_TO_SUBTASK = 1 << 2;
+    public static final int PREPEND_MAIN_LABEL_TO_SUBTASK = 1 << 2;
 
     private int parentTicks = 0;
     private double sentToParent = 0.0;
@@ -73,8 +73,8 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
     private String mainTaskLabel;
 
     /**
-     * Creates a new sub-progress monitor for the given monitor. The sub
-     * progress monitor uses the given number of work ticks from its
+     * Creates a new sub-progress monitor for the given monitor. The sub 
+     * progress monitor uses the given number of work ticks from its 
      * parent monitor.
      *
      * @param monitor the parent progress monitor
@@ -86,8 +86,8 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
     }
 
     /**
-     * Creates a new sub-progress monitor for the given monitor. The sub
-     * progress monitor uses the given number of work ticks from its
+     * Creates a new sub-progress monitor for the given monitor. The sub 
+     * progress monitor uses the given number of work ticks from its 
      * parent monitor.
      *
      * @param monitor the parent progress monitor
@@ -112,20 +112,20 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
      *
      * Starts a new main task. Since this progress monitor is a sub
      * progress monitor, the given name will NOT be used to update
-     * the progress bar's main task label. That means the given
+     * the progress bar's main task label. That means the given 
      * string will be ignored. If style <code>PREPEND_MAIN_LABEL_TO_SUBTASK
      * <code> is specified, then the given string will be prepended to
      * every string passed to <code>subTask(String)</code>.
      */
-    public override void beginTask(String name, int totalWork) {
+    public void beginTask(String name, int totalWork) {
         nestedBeginTasks++;
         // Ignore nested begin task calls.
         if (nestedBeginTasks > 1) {
             return;
         }
-        // be safe:  if the argument would cause math errors (zero or
+        // be safe:  if the argument would cause math errors (zero or 
         // negative), just use 0 as the scale.  This disables progress for
-        // this submonitor.
+        // this submonitor. 
         scale = totalWork <= 0 ? 0 : cast(double) parentTicks / cast(double) totalWork;
         if ((style & PREPEND_MAIN_LABEL_TO_SUBTASK) !is 0) {
             mainTaskLabel = name;
@@ -135,7 +135,7 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
     /* (Intentionally not javadoc'd)
      * Implements the method <code>IProgressMonitor.done</code>.
      */
-    public override void done() {
+    public void done() {
         // Ignore if more done calls than beginTask calls or if we are still
         // in some nested beginTasks
         if (nestedBeginTasks is 0 || --nestedBeginTasks > 0)
@@ -153,12 +153,12 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
     /* (Intentionally not javadoc'd)
      * Implements the internal method <code>IProgressMonitor.internalWorked</code>.
      */
-    public override void internalWorked(double work) {
+    public void internalWorked(double work) {
         if (usedUp || nestedBeginTasks !is 1) {
             return;
         }
 
-        double realWork = (work > 0.0) ? scale * work : 0.0;
+        double realWork = (work > 0.0d) ? scale * work : 0.0d;
         super.internalWorked(realWork);
         sentToParent += realWork;
         if (sentToParent >= parentTicks) {
@@ -169,14 +169,14 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
     /* (Intentionally not javadoc'd)
      * Implements the method <code>IProgressMonitor.subTask</code>.
      */
-    public override void subTask(String name) {
+    public void subTask(String name) {
         if ((style & SUPPRESS_SUBTASK_LABEL) !is 0) {
             return;
         }
         hasSubTask = true;
         String label = name;
-        if ((style & PREPEND_MAIN_LABEL_TO_SUBTASK) !is 0 && mainTaskLabel !is null && mainTaskLabel.length > 0) {
-            label = mainTaskLabel ~ ' ' ~ label;
+        if ((style & PREPEND_MAIN_LABEL_TO_SUBTASK) !is 0 && mainTaskLabel !is null && mainTaskLabel.length() > 0) {
+            label = mainTaskLabel + ' ' + label;
         }
         super.subTask(label);
     }
@@ -184,7 +184,7 @@ public class SubProgressMonitor : ProgressMonitorWrapper {
     /* (Intentionally not javadoc'd)
      * Implements the method <code>IProgressMonitor.worked</code>.
      */
-    public override void worked(int work) {
+    public void worked(int work) {
         internalWorked(work);
     }
 }

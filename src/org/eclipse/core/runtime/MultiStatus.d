@@ -4,23 +4,22 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.MultiStatus;
-
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.IStatus;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeMultiStatus;
 
 import java.lang.all;
-static import tango.text.Text;
+
+import org.eclipse.core.runtimeStatus; // packageimport
+import org.eclipse.core.runtimeAssert; // packageimport
+import org.eclipse.core.runtimeIStatus; // packageimport
 
 /**
- * A concrete multi-status implementation,
+ * A concrete multi-status implementation, 
  * suitable either for instantiating or subclassing.
  * <p>
  * This class can be used without OSGi running.
@@ -41,9 +40,9 @@ public class MultiStatus : Status {
      * @param message a human-readable message, localized to the
      *    current locale
      * @param exception a low-level exception, or <code>null</code> if not
-     *    applicable
+     *    applicable 
      */
-    public this(String pluginId, int code, IStatus[] newChildren, String message, Exception exception) {
+    public this(String pluginId, int code, IStatus[] newChildren, String message, Throwable exception) {
         this(pluginId, code, message, exception);
         Assert.isLegal(newChildren !is null);
         int maxSeverity = getSeverity();
@@ -55,7 +54,7 @@ public class MultiStatus : Status {
         }
         this.children = new IStatus[newChildren.length];
         setSeverity(maxSeverity);
-        SimpleType!(IStatus).arraycopy(newChildren, 0, this.children, 0, newChildren.length);
+        System.arraycopy(newChildren, 0, this.children, 0, newChildren.length);
     }
 
     /**
@@ -66,9 +65,9 @@ public class MultiStatus : Status {
      * @param message a human-readable message, localized to the
      *    current locale
      * @param exception a low-level exception, or <code>null</code> if not
-     *    applicable
+     *    applicable 
      */
-    public this(String pluginId, int code, String message, Exception exception) {
+    public this(String pluginId, int code, String message, Throwable exception) {
         super(OK, pluginId, code, message, exception);
         children = new IStatus[0];
     }
@@ -81,7 +80,7 @@ public class MultiStatus : Status {
     public void add(IStatus status) {
         Assert.isLegal(status !is null);
         IStatus[] result = new IStatus[children.length + 1];
-        SimpleType!(IStatus).arraycopy(children, 0, result, 0, children.length);
+        System.arraycopy(children, 0, result, 0, children.length);
         result[result.length - 1] = status;
         children = result;
         int newSev = status.getSeverity();
@@ -108,23 +107,23 @@ public class MultiStatus : Status {
     /* (Intentionally not javadoc'd)
      * Implements the corresponding method on <code>IStatus</code>.
      */
-    public override IStatus[] getChildren() {
+    public IStatus[] getChildren() {
         return children;
     }
 
     /* (Intentionally not javadoc'd)
      * Implements the corresponding method on <code>IStatus</code>.
      */
-    public override bool isMultiStatus() {
+    public bool isMultiStatus() {
         return true;
     }
 
     /**
      * Merges the given status into this multi-status.
      * Equivalent to <code>add(status)</code> if the
-     * given status is not a multi-status.
+     * given status is not a multi-status. 
      * Equivalent to <code>addAll(status)</code> if the
-     * given status is a multi-status.
+     * given status is a multi-status. 
      *
      * @param status the status to merge into this one
      * @see #add(IStatus)
@@ -140,18 +139,17 @@ public class MultiStatus : Status {
     }
 
     /**
-     * Returns a string representation of the status, suitable
+     * Returns a string representation of the status, suitable 
      * for debugging purposes only.
      */
-    public override String toString() {
-        tango.text.Text.Text!(char) buf = new tango.text.Text.Text!(char);
-        buf.append(super.toString());
+    public String toString() {
+        StringBuffer buf = new StringBuffer(super.toString());
         buf.append(" children=["); //$NON-NLS-1$
         for (int i = 0; i < children.length; i++) {
             if (i !is 0) {
                 buf.append(" "); //$NON-NLS-1$
             }
-            buf.append( (cast(Object)children[i]).toString());
+            buf.append(children[i].toString());
         }
         buf.append("]"); //$NON-NLS-1$
         return buf.toString();

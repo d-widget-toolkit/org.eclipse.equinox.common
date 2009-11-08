@@ -4,32 +4,32 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IPath;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIPath;
 
 import java.lang.all;
-import tango.io.FilePath;
+
 
 /**
  * A path is an ordered collection of string segments,
  * separated by a standard separator character, "/".
  * A path may also have a leading and/or a trailing separator.
  * Paths may also be prefixed by an optional device id, which includes
- * the character(s) which separate the device id from the rest
+ * the character(s) which separate the device id from the rest 
  * of the path. For example, "C:" and "Server/Volume:" are typical
  * device ids.
  * A device independent path has <code>null</code> for a device id.
  * <p>
- * Note that paths are value objects; all operations on paths
+ * Note that paths are value objects; all operations on paths 
  * return a new path; the path that is operated on is unscathed.
  * </p>
  * <p>
- * UNC paths are denoted by leading double-slashes such
+ * UNC paths are denoted by leading double-slashes such 
  * as <code>//Server/Volume/My/Path</code>. When a new path
  * is constructed all double-slashes are removed except those
  * appearing at the beginning of the path.
@@ -48,16 +48,16 @@ public interface IPath : Cloneable {
     /**
      * Path separator character constant "/" used in paths.
      */
-    public static const char SEPARATOR = '/';
+    public static final char SEPARATOR = '/';
 
-    /**
+    /** 
      * Device separator character constant ":" used in paths.
      */
-    public static const char DEVICE_SEPARATOR = ':';
+    public static final char DEVICE_SEPARATOR = ':';
 
     /**
      * Returns a new path which is the same as this path but with
-     * the given file extension added.  If this path is empty, root or has a
+     * the given file extension added.  If this path is empty, root or has a 
      * trailing separator, this path is returned.  If this path already
      * has an extension, the existing extension is left and the given
      * extension simply appended.  Clients wishing to replace
@@ -93,13 +93,13 @@ public interface IPath : Cloneable {
      * Returns the canonicalized path obtained from the
      * concatenation of the given string path to the
      * end of this path. The given string path must be a valid
-     * path. If it has a trailing separator,
+     * path. If it has a trailing separator, 
      * the result will have a trailing separator.
      * The device id of this path is preserved (the one
      * of the given string is ignored). Duplicate slashes
      * are removed from the path except at the beginning
      * where the path is considered to be UNC.
-     *
+     * 
      * @param path the string path to concatenate
      * @return the new path
      * @see #isValidPath(String)
@@ -107,7 +107,7 @@ public interface IPath : Cloneable {
     public IPath append(String path);
 
     /**
-     * Returns the canonicalized path obtained from the
+     * Returns the canonicalized path obtained from the 
      * concatenation of the given path's segments to the
      * end of this path.  If the given path has a trailing
      * separator, the result will have a trailing separator.
@@ -141,7 +141,7 @@ public interface IPath : Cloneable {
      * @return <code>true</code> if the paths are equivalent,
      *    and <code>false</code> if they are not
      */
-    public int opEquals(Object obj);
+    public override equals_t opEquals(Object obj);
 
     /**
      * Returns the device id for this path, or <code>null</code> if this
@@ -153,7 +153,7 @@ public interface IPath : Cloneable {
     public String getDevice();
 
     /**
-     * Returns the file extension portion of this path,
+     * Returns the file extension portion of this path, 
      * or <code>null</code> if there is none.
      * <p>
      * The file extension portion is defined as the string
@@ -186,7 +186,7 @@ public interface IPath : Cloneable {
      * any device id).
      * <p>
      * Absolute paths start with a path separator.
-     * A root path, like <code>/</code> or <code>C:/</code>,
+     * A root path, like <code>/</code> or <code>C:/</code>, 
      * is considered absolute.  UNC paths are always absolute.
      * </p>
      *
@@ -210,7 +210,7 @@ public interface IPath : Cloneable {
      * appear in the argument path in the same order,
      * and their device ids must match.
      * <p>
-     * An empty path is a prefix of all paths with the same device; a root path is a prefix of
+     * An empty path is a prefix of all paths with the same device; a root path is a prefix of 
      * all absolute paths with the same device.
      * </p>
      * @param anotherPath the other path
@@ -222,7 +222,7 @@ public interface IPath : Cloneable {
     /**
      * Returns whether this path is a root path.
      * <p>
-     * The root path is the absolute non-UNC path with zero segments;
+     * The root path is the absolute non-UNC path with zero segments; 
      * e.g., <code>/</code> or <code>C:/</code>.
      * The separator is considered a leading separator, not a trailing one.
      * </p>
@@ -233,23 +233,23 @@ public interface IPath : Cloneable {
     public bool isRoot();
 
     /**
-     * Returns a bool value indicating whether or not this path
+     * Returns a boolean value indicating whether or not this path
      * is considered to be in UNC form. Return false if this path
      * has a device set or if the first 2 characters of the path string
      * are not <code>Path.SEPARATOR</code>.
-     *
-     * @return bool indicating if this path is UNC
+     * 
+     * @return boolean indicating if this path is UNC
      */
     public bool isUNC();
 
     /**
      * Returns whether the given string is syntactically correct as
      * a path.  The device id is the prefix up to and including the device
-     * separator for the local file system; the path proper is everything to
-     * the right of it, or the entire string if there is no device separator.
+     * separator for the local file system; the path proper is everything to 
+     * the right of it, or the entire string if there is no device separator. 
      * When the platform location is a file system with no meaningful device
      * separator, the entire string is treated as the path proper.
-     * The device id is not checked for validity; the path proper is correct
+     * The device id is not checked for validity; the path proper is correct 
      * if each of the segments in its canonicalized form is valid.
      *
      * @param path the path to check
@@ -260,7 +260,7 @@ public interface IPath : Cloneable {
     public bool isValidPath(String path);
 
     /**
-     * Returns whether the given string is valid as a segment in
+     * Returns whether the given string is valid as a segment in 
      * a path. The rules for valid segments are as follows:
      * <ul>
      * <li> the empty string is not valid
@@ -280,13 +280,13 @@ public interface IPath : Cloneable {
      * Returns the last segment of this path, or
      * <code>null</code> if it does not have any segments.
      *
-     * @return the last segment of this path, or <code>null</code>
+     * @return the last segment of this path, or <code>null</code> 
      */
     public String lastSegment();
 
     /**
      * Returns an absolute path with the segments and device id of this path.
-     * Absolute paths start with a path separator. If this path is absolute,
+     * Absolute paths start with a path separator. If this path is absolute, 
      * it is simply returned.
      *
      * @return the new path
@@ -295,7 +295,7 @@ public interface IPath : Cloneable {
 
     /**
      * Returns a relative path with the segments and device id of this path.
-     * Absolute paths start with a path separator and relative paths do not.
+     * Absolute paths start with a path separator and relative paths do not. 
      * If this path is relative, it is simply returned.
      *
      * @return the new path
@@ -304,13 +304,13 @@ public interface IPath : Cloneable {
 
     /**
      * Return a new path which is the equivalent of this path converted to UNC
-     * form (if the given bool is true) or this path not as a UNC path (if the given
-     * bool is false). If UNC, the returned path will not have a device and the
+     * form (if the given boolean is true) or this path not as a UNC path (if the given
+     * boolean is false). If UNC, the returned path will not have a device and the 
      * first 2 characters of the path string will be <code>Path.SEPARATOR</code>. If not UNC, the
-     *  first 2 characters of the returned path string will not be <code>Path.SEPARATOR</code>.
-     *
+     * 	first 2 characters of the returned path string will not be <code>Path.SEPARATOR</code>.
+     * 
      * @param toUNC true if converting to UNC, false otherwise
-     * @return the new path, either in UNC form or not depending on the bool parameter
+     * @return the new path, either in UNC form or not depending on the boolean parameter
      */
     public IPath makeUNC(bool toUNC);
 
@@ -326,7 +326,7 @@ public interface IPath : Cloneable {
 
     /**
      * Returns a new path which is the same as this path but with
-     * the file extension removed.  If this path does not have an
+     * the file extension removed.  If this path does not have an 
      * extension, this path is returned.
      * <p>
      * The file extension portion is defined as the string
@@ -342,7 +342,7 @@ public interface IPath : Cloneable {
 
     /**
      * Returns a copy of this path with the given number of segments
-     * removed from the beginning. The device id is preserved.
+     * removed from the beginning. The device id is preserved. 
      * The number must be greater or equal zero.
      * If the count is zero, this path is returned.
      * The resulting path will always be a relative path with respect
@@ -395,13 +395,13 @@ public interface IPath : Cloneable {
      * <code>null</code> if the path does not have such a segment.
      *
      * @param index the 0-based segment index
-     * @return the specified segment, or <code>null</code>
+     * @return the specified segment, or <code>null</code> 
      */
     public String segment(int index);
 
     /**
      * Returns the number of segments in this path.
-     * <p>
+     * <p> 
      * Note that both root and empty paths have 0 segments.
      * </p>
      *
@@ -417,7 +417,7 @@ public interface IPath : Cloneable {
     public String[] segments();
 
     /**
-     * Returns a new path which is the same as this path but with
+     * Returns a new path which is the same as this path but with 
      * the given device id.  The device id must end with a ":".
      * A device independent path is obtained by passing <code>null</code>.
      * <p>
@@ -435,7 +435,7 @@ public interface IPath : Cloneable {
      *
      * @return the file corresponding to this path
      */
-    public tango.io.FilePath.FilePath toFile();
+    public java.io.File toFile();
 
     /**
      * Returns a string representation of this path which uses the
@@ -451,9 +451,9 @@ public interface IPath : Cloneable {
     public String toOSString();
 
     /**
-     * Returns a platform-neutral string representation of this path. The
-     * format is not specified, except that the resulting string can be
-     * passed back to the <code>Path#fromPortableString(String)</code>
+     * Returns a platform-neutral string representation of this path. The 
+     * format is not specified, except that the resulting string can be 
+     * passed back to the <code>Path#fromPortableString(String)</code> 
      * constructor to produce the exact same path on any platform.
      * <p>
      * This string is suitable for passing to <code>Path#fromPortableString(String)</code>.

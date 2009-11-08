@@ -4,20 +4,22 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IStatus;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIStatus;
 
 import java.lang.all;
 
+import org.eclipse.core.runtimeStatus; // packageimport
+
 /**
  * A status object represents the outcome of an operation.
- * All <code>CoreException</code>s carry a status object to indicate
- * what went wrong. Status objects are also returned by methods needing
+ * All <code>CoreException</code>s carry a status object to indicate 
+ * what went wrong. Status objects are also returned by methods needing 
  * to provide details of failures (e.g., validation methods).
  * <p>
  * A status carries the following information:
@@ -29,7 +31,7 @@ import java.lang.all;
  * <li> exception (optional) - for problems stemming from a failure at
  *    a lower level</li>
  * </ul>
- * Some status objects, known as multi-statuses, have other status objects
+ * Some status objects, known as multi-statuses, have other status objects 
  * as children.
  * </p>
  * <p>
@@ -49,25 +51,25 @@ public interface IStatus {
      * @see #getSeverity()
      * @see #isOK()
      */
-    public static const int OK = 0;
+    public static final int OK = 0;
 
     /** Status type severity (bit mask, value 1) indicating this status is informational only.
      * @see #getSeverity()
      * @see #matches(int)
      */
-    public static const int INFO = 0x01;
+    public static final int INFO = 0x01;
 
     /** Status type severity (bit mask, value 2) indicating this status represents a warning.
      * @see #getSeverity()
      * @see #matches(int)
      */
-    public static const int WARNING = 0x02;
+    public static final int WARNING = 0x02;
 
     /** Status type severity (bit mask, value 4) indicating this status represents an error.
      * @see #getSeverity()
      * @see #matches(int)
      */
-    public static const int ERROR = 0x04;
+    public static final int ERROR = 0x04;
 
     /** Status type severity (bit mask, value 8) indicating this status represents a
      * cancelation
@@ -75,7 +77,7 @@ public interface IStatus {
      * @see #matches(int)
      * @since 3.0
      */
-    public static const int CANCEL = 0x08;
+    public static final int CANCEL = 0x08;
 
     /**
      * Returns a list of status object immediately contained in this
@@ -94,14 +96,14 @@ public interface IStatus {
     public int getCode();
 
     /**
-     * Returns the relevant low-level exception, or <code>null</code> if none.
+     * Returns the relevant low-level exception, or <code>null</code> if none. 
      * For example, when an operation fails because of a network communications
      * failure, this might return the <code>java.io.IOException</code>
      * describing the exact nature of that failure.
      *
      * @return the relevant low-level exception, or <code>null</code> if none
      */
-    public Exception getException();
+    public Throwable getException();
 
     /**
      * Returns the message describing the outcome.
@@ -135,7 +137,7 @@ public interface IStatus {
      * no children.
      * </p>
      *
-     * @return the severity: one of <code>OK</code>, <code>ERROR</code>,
+     * @return the severity: one of <code>OK</code>, <code>ERROR</code>, 
      * <code>INFO</code>, <code>WARNING</code>,  or <code>CANCEL</code>
      * @see #matches(int)
      */
@@ -154,7 +156,7 @@ public interface IStatus {
      * multi-status objects in a multi-status unaware way.
      * </p>
      *
-     * @return <code>true</code> for a multi-status,
+     * @return <code>true</code> for a multi-status, 
      *    <code>false</code> otherwise
      * @see #getChildren()
      */
@@ -178,7 +180,7 @@ public interface IStatus {
      * @param severityMask a mask formed by bitwise or'ing severity mask
      *    constants (<code>ERROR</code>, <code>WARNING</code>,
      *    <code>INFO</code>, <code>CANCEL</code>)
-     * @return <code>true</code> if there is at least one match,
+     * @return <code>true</code> if there is at least one match, 
      *    <code>false</code> if there are no matches
      * @see #getSeverity()
      * @see #CANCEL

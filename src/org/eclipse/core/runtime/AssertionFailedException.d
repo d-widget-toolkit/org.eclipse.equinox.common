@@ -4,16 +4,16 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.AssertionFailedException;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeAssertionFailedException;
 
 import java.lang.all;
-version(JIVE) import jive.stacktrace;
+
 
 /**
  * <code>AssertionFailedException</code> is a runtime exception thrown
@@ -35,9 +35,9 @@ public class AssertionFailedException : RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
-    /**
+    /** 
      * Constructs a new exception with the given message.
-     *
+     * 
      * @param detail the message
      */
     public this(String detail) {

@@ -4,26 +4,29 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.SafeRunner;
-
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.CoreException;
-
-import org.eclipse.core.internal.runtime.IRuntimeConstants;
-
-import org.eclipse.core.runtime.ISafeRunnable;
-import org.eclipse.core.runtime.Assert;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeSafeRunner;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeStatus; // packageimport
+import org.eclipse.core.runtimeMultiStatus; // packageimport
+import org.eclipse.core.runtimeAssert; // packageimport
+import org.eclipse.core.runtimeISafeRunnable; // packageimport
+import org.eclipse.core.runtimeOperationCanceledException; // packageimport
+import org.eclipse.core.runtimeIStatus; // packageimport
+import org.eclipse.core.runtimeCoreException; // packageimport
+
+import org.eclipse.core.internal.runtime.Activator;
+import org.eclipse.core.internal.runtime.CommonMessages;
+import org.eclipse.core.internal.runtime.IRuntimeConstants;
+import org.eclipse.core.internal.runtime.RuntimeLog;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * Runs the given ISafeRunnable in a protected mode: exceptions
@@ -44,44 +47,39 @@ public final class SafeRunner {
      * @param code the runnable to run
      */
     public static void run(ISafeRunnable code) {
-        Assert.isNotNull(cast(Object)code);
+        Assert.isNotNull(code);
         try {
             code.run();
         } catch (Exception e) {
             handleException(code, e);
-// SWT not in D
-//         } catch (LinkageError e) {
-//             handleException(code, e);
+        } catch (LinkageError e) {
+            handleException(code, e);
         }
     }
 
-    private static void handleException(ISafeRunnable code, Exception e) {
-        if( null is cast(OperationCanceledException) e ){
-
-            // try to obtain the correct plug-in id for the bundle providing the safe runnable
-//          Activator activator = Activator.getDefault();
+    private static void handleException(ISafeRunnable code, Throwable e) {
+        if (!( null !is cast(OperationCanceledException)e )) {
+            // try to obtain the correct plug-in id for the bundle providing the safe runnable 
+            Activator activator = Activator.getDefault();
             String pluginId = null;
-//          if (activator !is null)
-//              pluginId = activator.getBundleId(code);
+            if (activator !is null)
+                pluginId = activator.getBundleId(code);
             if (pluginId is null)
                 pluginId = IRuntimeConstants.PI_COMMON;
-
-            String message = null;
-//          String message = NLS.bind(CommonMessages.meta_pluginProblems, pluginId);
+            String message = NLS.bind(CommonMessages.meta_pluginProblems, pluginId);
             IStatus status;
-            if ( auto ce = cast(CoreException) e ) {
+            if ( null !is cast(CoreException)e ) {
                 status = new MultiStatus(pluginId, IRuntimeConstants.PLUGIN_ERROR, message, e);
-                (cast(MultiStatus) status).merge( ce.getStatus());
+                (cast(MultiStatus) status).merge((cast(CoreException) e).getStatus());
             } else {
                 status = new Status(IStatus.ERROR, pluginId, IRuntimeConstants.PLUGIN_ERROR, message, e);
             }
-            // Make sure user sees the exception: if the log is empty, log the exceptions on stderr
-            //if (!RuntimeLog.isEmpty())
-            //    RuntimeLog.log(status);
-            //else
-            ExceptionPrintStackTrace(e);
+            // Make sure user sees the exception: if the log is empty, log the exceptions on stderr 
+            if (!RuntimeLog.isEmpty())
+                RuntimeLog.log(status);
+            else
+                e.printStackTrace();
         }
-
         code.handleException(e);
     }
 }

@@ -4,23 +4,23 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.QualifiedName;
-
-import org.eclipse.core.runtime.Assert;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeQualifiedName;
 
 import java.lang.all;
 
+import org.eclipse.core.runtimeAssert; // packageimport
+
 /**
  * Qualified names are two-part names: qualifier and local name.
- * The qualifier must be in URI form (see RFC2396).
+ * The qualifier must be in URI form (see RFC2396).  
  * Note however that the qualifier may be <code>null</code> if
- * the default name space is being used.  The empty string is not
+ * the default name space is being used.  The empty string is not 
  * a valid local name.
  * <p>
  * This class can be used without OSGi running.
@@ -50,7 +50,7 @@ public final class QualifiedName {
      * @param localName the local name string
      */
     public this(String qualifier, String localName) {
-        Assert.isLegal(localName !is null && localName.length !is 0);
+        Assert.isLegal(localName !is null && localName.length() !is 0);
         this.qualifier = qualifier;
         this.localName = localName;
     }
@@ -67,11 +67,11 @@ public final class QualifiedName {
      * @return <code>true</code> if these are equivalent qualified
      *    names, and <code>false</code> otherwise
      */
-    public override int opEquals(Object obj) {
+    public override equals_t opEquals(Object obj) {
         if (obj is this) {
             return true;
         }
-        if (!(cast(QualifiedName)obj )) {
+        if (!( null !is cast(QualifiedName)obj )) {
             return false;
         }
         QualifiedName qName = cast(QualifiedName) obj;
@@ -79,10 +79,10 @@ public final class QualifiedName {
         if (qualifier is null && qName.getQualifier() !is null) {
             return false;
         }
-        if (qualifier !is null && !qualifier.equals(qName.getQualifier())) {
+        if (qualifier !is null && !qualifier.opEquals(qName.getQualifier())) {
             return false;
         }
-        return localName.equals(qName.getLocalName());
+        return localName.opEquals(qName.getLocalName());
     }
 
     /**
@@ -106,18 +106,18 @@ public final class QualifiedName {
 
     /* (Intentionally omitted from javadoc)
      * Implements the method <code>Object.hashCode</code>.
-     *
+     * 
      * Returns the hash code for this qualified name.
      */
     public override hash_t toHash() {
-        return (qualifier is null ? 0 : .toHash(qualifier)) + .toHash(localName);
+        return (qualifier is null ? 0 : qualifier.toHash()) + localName.toHash();
     }
 
     /**
-     * Converts this qualified name into a string, suitable for
+     * Converts this qualified name into a string, suitable for 
      * debug purposes only.
      */
-    public override String toString() {
-        return (getQualifier() is null ? "" : getQualifier() ~ ':') ~ getLocalName(); //$NON-NLS-1$
+    public String toString() {
+        return (getQualifier() is null ? "" : getQualifier() + ':') + getLocalName(); //$NON-NLS-1$
     }
 }

@@ -4,16 +4,16 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IProgressMonitor;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIProgressMonitor;
 
 import java.lang.all;
-import java.lang.String;
+
 
 /**
  * The <code>IProgressMonitor</code> interface is implemented
@@ -22,25 +22,25 @@ import java.lang.String;
  * <p>
  * All activity is broken down into a linear sequence of tasks against
  * which progress is reported. When a task begins, a <code>beginTask(String, int)
- * </code> notification is reported, followed by any number and mixture of
- * progress reports (<code>worked()</code>) and subtask notifications
- * (<code>subTask(String)</code>).  When the task is eventually completed, a
+ * </code> notification is reported, followed by any number and mixture of 
+ * progress reports (<code>worked()</code>) and subtask notifications 
+ * (<code>subTask(String)</code>).  When the task is eventually completed, a 
  * <code>done()</code> notification is reported.  After the <code>done()</code>
  * notification, the progress monitor cannot be reused;  i.e., <code>
- * beginTask(String, int)</code> cannot be called again after the call to
+ * beginTask(String, int)</code> cannot be called again after the call to 
  * <code>done()</code>.
  * </p>
  * <p>
- * A request to cancel an operation can be signaled using the
+ * A request to cancel an operation can be signaled using the 
  * <code>setCanceled</code> method.  Operations taking a progress
  * monitor are expected to poll the monitor (using <code>isCanceled</code>)
- * periodically and abort at their earliest convenience.  Operation can however
+ * periodically and abort at their earliest convenience.  Operation can however 
  * choose to ignore cancelation requests.
  * </p>
  * <p>
- * Since notification is synchronous with the activity itself, the listener should
- * provide a fast and robust implementation. If the handling of notifications would
- * involve blocking operations, or operations which might throw uncaught exceptions,
+ * Since notification is synchronous with the activity itself, the listener should 
+ * provide a fast and robust implementation. If the handling of notifications would 
+ * involve blocking operations, or operations which might throw uncaught exceptions, 
  * the notifications should be queued, and the actual processing deferred (or perhaps
  * delegated to a separate thread).
  * </p><p>
@@ -53,32 +53,32 @@ public interface IProgressMonitor {
 
     /** Constant indicating an unknown amount of work.
      */
-    public static const int UNKNOWN = -1;
+    public final static int UNKNOWN = -1;
 
     /**
      * Notifies that the main task is beginning.  This must only be called once
      * on a given progress monitor instance.
-     *
+     * 
      * @param name the name (or description) of the main task
      * @param totalWork the total number of work units into which
-     *  the main task is been subdivided. If the value is <code>UNKNOWN</code>
-     *  the implementation is free to indicate progress in a way which
+     *  the main task is been subdivided. If the value is <code>UNKNOWN</code> 
+     *  the implementation is free to indicate progress in a way which 
      *  doesn't require the total number of work units in advance.
      */
     public void beginTask(String name, int totalWork);
 
     /**
-     * Notifies that the work is done; that is, either the main task is completed
-     * or the user canceled it. This method may be called more than once
+     * Notifies that the work is done; that is, either the main task is completed 
+     * or the user canceled it. This method may be called more than once 
      * (implementations should be prepared to handle this case).
      */
     public void done();
 
     /**
      * Internal method to handle scaling correctly. This method
-     * must not be called by a client. Clients should
+     * must not be called by a client. Clients should 
      * always use the method </code>worked(int)</code>.
-     *
+     * 
      * @param work the amount of work done
      */
     public void internalWorked(double work);
@@ -90,13 +90,13 @@ public interface IProgressMonitor {
      *
      * @return <code>true</code> if cancellation has been requested,
      *    and <code>false</code> otherwise
-     * @see #setCanceled(bool)
+     * @see #setCanceled(boolean)
      */
     public bool isCanceled();
 
     /**
      * Sets the cancel state to the given value.
-     *
+     * 
      * @param value <code>true</code> indicates that cancelation has
      *     been requested (but not necessarily acknowledged);
      *     <code>false</code> clears this flag
@@ -105,8 +105,8 @@ public interface IProgressMonitor {
     public void setCanceled(bool value);
 
     /**
-     * Sets the task name to the given value. This method is used to
-     * restore the task label after a nested operation was executed.
+     * Sets the task name to the given value. This method is used to 
+     * restore the task label after a nested operation was executed. 
      * Normally there is no need for clients to call this method.
      *
      * @param name the name (or description) of the main task

@@ -4,17 +4,17 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IAdapterManager;
-
-import org.eclipse.core.runtime.IAdapterFactory;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIAdapterManager;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeIAdapterFactory; // packageimport
 
 /**
  * An adapter manager maintains a registry of adapter factories. Clients
@@ -26,7 +26,7 @@ import java.lang.all;
  * method on one of the registered adapter factories.
  * <p>
  * Adapter factories can be registered programmatically using the <code>registerAdapters</code>
- * method.  Alternatively, they can be registered declaratively using the
+ * method.  Alternatively, they can be registered declaratively using the 
  * <code>org.eclipse.core.runtime.adapters</code> extension point.  Factories registered
  * with this extension point will not be able to provide adapters until their
  * corresponding plugin has been activated.
@@ -34,30 +34,30 @@ import java.lang.all;
  * The following code snippet shows how one might register an adapter of type
  * <code>com.example.acme.Sticky</code> on resources in the workspace.
  * <p>
- *
+ * 
  * <pre>
  *  IAdapterFactory pr = new IAdapterFactory() {
- *      public Class[] getAdapterList() {
- *          return new Class[] { com.example.acme.Sticky.class };
- *      }
- *      public Object getAdapter(Object adaptableObject, Class adapterType) {
- *          IResource res = (IResource) adaptableObject;
- *          QualifiedName key = new QualifiedName(&quot;com.example.acme&quot;, &quot;sticky-note&quot;);
- *          try {
- *              com.example.acme.Sticky v = (com.example.acme.Sticky) res.getSessionProperty(key);
- *              if (v is null) {
- *                  v = new com.example.acme.Sticky();
- *                  res.setSessionProperty(key, v);
- *              }
- *          } catch (CoreException e) {
- *              // unable to access session property - ignore
- *          }
- *          return v;
- *      }
+ *  	public Class[] getAdapterList() {
+ *  		return new Class[] { com.example.acme.Sticky.class };
+ *  	}
+ *  	public Object getAdapter(Object adaptableObject, Class adapterType) {
+ *  		IResource res = (IResource) adaptableObject;
+ *  		QualifiedName key = new QualifiedName(&quot;com.example.acme&quot;, &quot;sticky-note&quot;);
+ *  		try {
+ *  			com.example.acme.Sticky v = (com.example.acme.Sticky) res.getSessionProperty(key);
+ *  			if (v == null) {
+ *  				v = new com.example.acme.Sticky();
+ *  				res.setSessionProperty(key, v);
+ *  			}
+ *  		} catch (CoreException e) {
+ *  			// unable to access session property - ignore
+ *  		}
+ *  		return v;
+ *  	}
  *  }
  *  Platform.getAdapterManager().registerAdapters(pr, IResource.class);
  *   </pre>
- *
+ * 
  * </p><p>
  * This interface can be used without OSGi running.
  * </p><p>
@@ -71,27 +71,27 @@ import java.lang.all;
 public interface IAdapterManager {
 
     /**
-     * This value can be returned to indicate that no applicable adapter factory
-     * was found.
+     * This value can be returned to indicate that no applicable adapter factory 
+     * was found. 
      * @since org.eclipse.equinox.common 3.3
      */
-    public static const int NONE = 0;
+    public static final int NONE = 0;
 
     /**
-     * This value can be returned to indicate that an adapter factory was found,
+     * This value can be returned to indicate that an adapter factory was found, 
      * but has not been loaded.
      * @since org.eclipse.equinox.common 3.3
      */
-    public static const int NOT_LOADED = 1;
+    public static final int NOT_LOADED = 1;
 
     /**
      * This value can be returned to indicate that an adapter factory is loaded.
      * @since org.eclipse.equinox.common 3.3
      */
-    public static const int LOADED = 2;
+    public static final int LOADED = 2;
 
     /**
-     * Returns the types that can be obtained by converting <code>adaptableClass</code>
+     * Returns the types that can be obtained by converting <code>adaptableClass</code> 
      * via this manager. Converting means that subsequent calls to <code>getAdapter()</code>
      * or <code>loadAdapter()</code> could result in an adapted object.
      * <p>
@@ -101,18 +101,18 @@ public interface IAdapterManager {
      * loaded, or if the factory itself returns <code>null</code>, then
      * <code>getAdapter</code> will still return <code>null</code>.
      * </p>
-     * @param adaptableClass the adaptable class being queried
-     * @return an array of type names that can be obtained by converting
-     * <code>adaptableClass</code> via this manager. An empty array
+     * @param adaptableClass the adaptable class being queried	
+     * @return an array of type names that can be obtained by converting 
+     * <code>adaptableClass</code> via this manager. An empty array 
      * is returned if there are none.
      * @since 3.1
      */
-    public String[] computeAdapterTypes(ClassInfo adaptableClass);
+    public String[] computeAdapterTypes(Class adaptableClass);
 
     /**
-     * Returns the class search order for a given class. The search order from a
+     * Returns the class search order for a given class. The search order from a 
      * class with the definition <br>
-     * <code>class X extends Y implements A, B</code><br>
+     * <code>class X : Y , A, B</code><br>
      * is as follows:
      * <ul>
      * <li>the target's class: X
@@ -121,13 +121,13 @@ public interface IAdapterManager {
      * order returned by <code>getInterfaces</code> (in the example, A and its
      * superinterfaces then B and its superinterfaces) </li>
      * </ul>
-     *
-     * @param clazz the class for which to return the class order.
+     * 
+     * @param clazz the class for which to return the class order. 
      * @return the class search order for the given class. The returned
      * search order will minimally  contain the target class.
      * @since 3.1
      */
-    public ClassInfo[] computeClassOrder(ClassInfo clazz);
+    public Class[] computeClassOrder(Class clazz);
 
     /**
      * Returns an object which is an instance of the given class associated
@@ -136,7 +136,7 @@ public interface IAdapterManager {
      * <p>
      * Note that this method will never cause plug-ins to be loaded. If the
      * only suitable factory is not yet loaded, this method will return <code>null</code>.
-     *
+     * 
      * @param adaptable the adaptable object being queried (usually an instance
      * of <code>IAdaptable</code>)
      * @param adapterType the type of adapter to look up
@@ -144,7 +144,7 @@ public interface IAdapterManager {
      * if the given adaptable object does not have an available adapter of the
      * given type
      */
-    public Object getAdapter(Object adaptable, ClassInfo adapterType);
+    public Object getAdapter(Object adaptable, Class adapterType);
 
     /**
      * Returns an object which is an instance of the given class name associated
@@ -155,7 +155,7 @@ public interface IAdapterManager {
      * only suitable factory is not yet loaded, this method will return <code>null</code>.
      * If activation of the plug-in providing the factory is required, use the
      * <code>loadAdapter</code> method instead.
-     *
+     * 
      * @param adaptable the adaptable object being queried (usually an instance
      * of <code>IAdaptable</code>)
      * @param adapterTypeName the fully qualified name of the type of adapter to look up
@@ -175,7 +175,7 @@ public interface IAdapterManager {
      * will return a non-null result. If the factory's plug-in has not yet been
      * loaded, or if the factory itself returns <code>null</code>, then
      * <code>getAdapter</code> will still return <code>null</code>.
-     *
+     * 
      * @param adaptable the adaptable object being queried (usually an instance
      * of <code>IAdaptable</code>)
      * @param adapterTypeName the fully qualified class name of an adapter to
@@ -200,7 +200,7 @@ public interface IAdapterManager {
      * of <code>IAdaptable</code>)
      * @param adapterTypeName the fully qualified class name of an adapter to
      * look up
-     * @return a status of the adapter
+     * @return a status of the adapter 
      * @since org.eclipse.equinox.common 3.3
      */
     public int queryAdapter(Object adaptable, String adapterTypeName);
@@ -215,7 +215,7 @@ public interface IAdapterManager {
      * if necessary. As such, this method should be used judiciously, in order
      * to avoid unnecessary plug-in activations. Most clients should avoid
      * activation by using <code>getAdapter</code> instead.
-     *
+     * 
      * @param adaptable the adaptable object being queried (usually an instance
      * of <code>IAdaptable</code>)
      * @param adapterTypeName the fully qualified name of the type of adapter to look up
@@ -235,20 +235,20 @@ public interface IAdapterManager {
      * an interface, the adapters are available to all classes that directly or
      * indirectly implement that interface.
      * </p>
-     *
+     * 
      * @param factory the adapter factory
      * @param adaptable the type being extended
      * @see #unregisterAdapters(IAdapterFactory)
      * @see #unregisterAdapters(IAdapterFactory, Class)
      */
-    public void registerAdapters(IAdapterFactory factory, ClassInfo adaptable);
+    public void registerAdapters(IAdapterFactory factory, Class adaptable);
 
     /**
      * Removes the given adapter factory completely from the list of registered
      * factories. Equivalent to calling <code>unregisterAdapters(IAdapterFactory,Class)</code>
      * on all classes against which it had been explicitly registered. Does
      * nothing if the given factory is not currently registered.
-     *
+     * 
      * @param factory the adapter factory to remove
      * @see #registerAdapters(IAdapterFactory, Class)
      */
@@ -258,11 +258,11 @@ public interface IAdapterManager {
      * Removes the given adapter factory from the list of factories registered
      * as extending the given class. Does nothing if the given factory and type
      * combination is not registered.
-     *
+     * 
      * @param factory the adapter factory to remove
      * @param adaptable one of the types against which the given factory is
      * registered
      * @see #registerAdapters(IAdapterFactory, Class)
      */
-    public void unregisterAdapters(IAdapterFactory factory, ClassInfo adaptable);
+    public void unregisterAdapters(IAdapterFactory factory, Class adaptable);
 }

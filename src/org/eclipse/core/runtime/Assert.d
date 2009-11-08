@@ -4,17 +4,17 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.Assert;
-
-import org.eclipse.core.runtime.AssertionFailedException;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeAssert;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeAssertionFailedException; // packageimport
 
 /**
  * <code>Assert</code> is useful for for embedding runtime sanity checks
@@ -73,17 +73,11 @@ public final class Assert {
 
     /** Asserts that the given object is not <code>null</code>. If this
      * is not the case, some kind of unchecked exception is thrown.
-     *
+     * 
      * @param object the value to test
      */
     public static void isNotNull(Object object) {
         isNotNull(object, ""); //$NON-NLS-1$
-    }
-    public static void isNotNull(String str) {
-        isTrue(str.ptr !is null); //$NON-NLS-1$
-    }
-    public static void isNotNull(void* ptr) {
-        isTrue(ptr !is null); //$NON-NLS-1$
     }
 
     /** Asserts that the given object is not <code>null</code>. If this
@@ -95,13 +89,7 @@ public final class Assert {
      */
     public static void isNotNull(Object object, String message) {
         if (object is null)
-            throw new AssertionFailedException("null argument:" ~ message); //$NON-NLS-1$
-    }
-    public static void isNotNull(String str, String message) {
-        isTrue(str.ptr !is null, message ); //$NON-NLS-1$
-    }
-    public static void isNotNull(void* ptr, String message) {
-        isTrue(ptr !is null, message ); //$NON-NLS-1$
+            throw new AssertionFailedException("null argument:" + message); //$NON-NLS-1$
     }
 
     /** Asserts that the given bool is <code>true</code>. If this
@@ -126,7 +114,7 @@ public final class Assert {
      */
     public static bool isTrue(bool expression, String message) {
         if (!expression)
-            throw new AssertionFailedException("assertion failed: " ~ message); //$NON-NLS-1$
+            throw new AssertionFailedException("assertion failed: " + message); //$NON-NLS-1$
         return expression;
     }
 }

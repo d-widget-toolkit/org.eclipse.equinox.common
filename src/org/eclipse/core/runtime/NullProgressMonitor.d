@@ -4,17 +4,17 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.core.runtime.IProgressMonitor;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeNullProgressMonitor;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeIProgressMonitor; // packageimport
 
 /**
  * A default progress monitor implementation suitable for
@@ -37,13 +37,14 @@ public class NullProgressMonitor : IProgressMonitor {
      * Constructs a new progress monitor.
      */
     public this() {
+        super();
     }
 
     /**
-     * This implementation does nothing.
+     * This implementation does nothing. 
      * Subclasses may override this method to do interesting
      * processing when a task begins.
-     *
+     * 
      * @see IProgressMonitor#beginTask(String, int)
      */
     public void beginTask(String name, int totalWork) {
@@ -54,7 +55,7 @@ public class NullProgressMonitor : IProgressMonitor {
      * This implementation does nothing.
      * Subclasses may override this method to do interesting
      * processing when a task is done.
-     *
+     * 
      * @see IProgressMonitor#done()
      */
     public void done() {
@@ -64,7 +65,7 @@ public class NullProgressMonitor : IProgressMonitor {
     /**
      * This implementation does nothing.
      * Subclasses may override this method.
-     *
+     * 
      * @see IProgressMonitor#internalWorked(double)
      */
     public void internalWorked(double work) {
@@ -72,13 +73,13 @@ public class NullProgressMonitor : IProgressMonitor {
     }
 
     /**
-     * This implementation returns the value of the internal
+     * This implementation returns the value of the internal 
      * state variable set by <code>setCanceled</code>.
      * Subclasses which override this method should
      * override <code>setCanceled</code> as well.
      *
      * @see IProgressMonitor#isCanceled()
-     * @see IProgressMonitor#setCanceled(bool)
+     * @see IProgressMonitor#setCanceled(boolean)
      */
     public bool isCanceled() {
         return cancelled;
@@ -86,11 +87,11 @@ public class NullProgressMonitor : IProgressMonitor {
 
     /**
      * This implementation sets the value of an internal state variable.
-     * Subclasses which override this method should override
+     * Subclasses which override this method should override 
      * <code>isCanceled</code> as well.
      *
      * @see IProgressMonitor#isCanceled()
-     * @see IProgressMonitor#setCanceled(bool)
+     * @see IProgressMonitor#setCanceled(boolean)
      */
     public void setCanceled(bool cancelled) {
         this.cancelled = cancelled;
@@ -100,7 +101,7 @@ public class NullProgressMonitor : IProgressMonitor {
      * This implementation does nothing.
      * Subclasses may override this method to do something
      * with the name of the task.
-     *
+     * 
      * @see IProgressMonitor#setTaskName(String)
      */
     public void setTaskName(String name) {
@@ -111,7 +112,7 @@ public class NullProgressMonitor : IProgressMonitor {
      * This implementation does nothing.
      * Subclasses may override this method to do interesting
      * processing when a subtask begins.
-     *
+     * 
      * @see IProgressMonitor#subTask(String)
      */
     public void subTask(String name) {
@@ -122,7 +123,7 @@ public class NullProgressMonitor : IProgressMonitor {
      * This implementation does nothing.
      * Subclasses may override this method to do interesting
      * processing when some work has been completed.
-     *
+     * 
      * @see IProgressMonitor#worked(int)
      */
     public void worked(int work) {

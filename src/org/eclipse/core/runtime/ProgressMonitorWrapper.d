@@ -4,20 +4,20 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.ProgressMonitorWrapper;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IProgressMonitorWithBlocking;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Assert;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeProgressMonitorWrapper;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeIProgressMonitorWithBlocking; // packageimport
+import org.eclipse.core.runtimeAssert; // packageimport
+import org.eclipse.core.runtimeIProgressMonitor; // packageimport
+import org.eclipse.core.runtimeIStatus; // packageimport
 
 /**
  * An abstract wrapper around a progress monitor which,
@@ -34,17 +34,17 @@ public abstract class ProgressMonitorWrapper : IProgressMonitor, IProgressMonito
     /** The wrapped progress monitor. */
     private IProgressMonitor progressMonitor;
 
-    /**
+    /** 
      * Creates a new wrapper around the given monitor.
      *
      * @param monitor the progress monitor to forward to
      */
     protected this(IProgressMonitor monitor) {
-        Assert.isNotNull(cast(Object)monitor);
+        Assert.isNotNull(monitor);
         progressMonitor = monitor;
     }
 
-    /**
+    /** 
      * This implementation of a <code>IProgressMonitor</code>
      * method forwards to the wrapped progress monitor.
      * Clients may override this method to do additional
@@ -66,8 +66,8 @@ public abstract class ProgressMonitorWrapper : IProgressMonitor, IProgressMonito
      * @since 3.0
      */
     public void clearBlocked() {
-        if ( auto mon = cast(IProgressMonitorWithBlocking)progressMonitor )
-            mon.clearBlocked();
+        if ( null !is cast(IProgressMonitorWithBlocking)progressMonitor )
+            (cast(IProgressMonitorWithBlocking) progressMonitor).clearBlocked();
     }
 
     /**
@@ -125,8 +125,8 @@ public abstract class ProgressMonitorWrapper : IProgressMonitor, IProgressMonito
      * @since 3.0
      */
     public void setBlocked(IStatus reason) {
-        if ( auto mon = cast(IProgressMonitorWithBlocking)progressMonitor)
-            mon.setBlocked(reason);
+        if ( null !is cast(IProgressMonitorWithBlocking)progressMonitor )
+            (cast(IProgressMonitorWithBlocking) progressMonitor).setBlocked(reason);
     }
 
     /**
@@ -135,7 +135,7 @@ public abstract class ProgressMonitorWrapper : IProgressMonitor, IProgressMonito
      * Clients may override this method to do additional
      * processing.
      *
-     * @see IProgressMonitor#setCanceled(bool)
+     * @see IProgressMonitor#setCanceled(boolean)
      */
     public void setCanceled(bool b) {
         progressMonitor.setCanceled(b);

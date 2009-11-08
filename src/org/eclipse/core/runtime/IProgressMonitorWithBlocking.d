@@ -4,18 +4,18 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM - Initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IProgressMonitorWithBlocking;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIProgressMonitorWithBlocking;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeIProgressMonitor; // packageimport
+import org.eclipse.core.runtimeIStatus; // packageimport
 
 /**
  * An extension to the IProgressMonitor interface for monitors that want to
@@ -48,7 +48,7 @@ public interface IProgressMonitorWithBlocking : IProgressMonitor {
      * the caller. If this blocking job is not known, this method will return a plain
      * informational <code>IStatus</code> object.
      * </p>
-     *
+     * 
      * @param reason an optional status object whose message describes the
      * reason why this operation is blocked, or <code>null</code> if this
      * information is not available.
@@ -60,7 +60,7 @@ public interface IProgressMonitorWithBlocking : IProgressMonitor {
      * Clears the blocked state of the running operation. If a running
      * operation ever calls <code>setBlocked</code>, it must eventually call
      * <code>clearBlocked</code> before the operation completes.
-     *
+     * 
      * @see #setBlocked(IStatus)
      */
     public void clearBlocked();

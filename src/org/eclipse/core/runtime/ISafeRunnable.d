@@ -4,16 +4,17 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.ISafeRunnable;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeISafeRunnable;
 
-// import org.eclipse.swt.internal.Platform;
 import java.lang.all;
+
+
 /**
  * Safe runnables represent blocks of code and associated exception
  * handlers.  They are typically used when a plug-in needs to call some
@@ -35,10 +36,10 @@ public interface ISafeRunnable {
      * Platform's run mechanism.
      *
      * @param exception an exception which occurred during processing
-     *      the body of this runnable (i.e., in <code>run()</code>)
+     *		the body of this runnable (i.e., in <code>run()</code>)
      * @see SafeRunner#run(ISafeRunnable)
      */
-    public void handleException(Exception exception);
+    public void handleException(Throwable exception);
 
     /**
      * Runs this runnable.  Any exceptions thrown from this method will
@@ -46,8 +47,8 @@ public interface ISafeRunnable {
      * method.
      *
      * @exception Exception if a problem occurred while running this method.
-     *      The exception will be processed by <code>handleException</code>
+     *		The exception will be processed by <code>handleException</code>
      * @see SafeRunner#run(ISafeRunnable)
      */
-    public void run();
+    public void run() ;
 }

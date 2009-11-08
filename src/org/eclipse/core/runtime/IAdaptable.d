@@ -4,28 +4,29 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IAdaptable;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIAdaptable;
 
 import java.lang.all;
+
 
 /**
  * An interface for an adaptable object.
  * <p>
- * Adaptable objects can be dynamically extended to provide different
- * interfaces (or "adapters").  Adapters are created by adapter
+ * Adaptable objects can be dynamically extended to provide different 
+ * interfaces (or "adapters").  Adapters are created by adapter 
  * factories, which are in turn managed by type by adapter managers.
  * </p>
  * For example,
  * <pre>
  *     IAdaptable a = [some adaptable];
  *     IFoo x = (IFoo)a.getAdapter(IFoo.class);
- *     if (x !is null)
+ *     if (x != null)
  *         [do IFoo things with x]
  * </pre>
  * <p>
@@ -45,9 +46,9 @@ public interface IAdaptable {
      * no such object can be found.
      *
      * @param adapter the adapter class to look up
-     * @return a object castable to the given class,
+     * @return a object castable to the given class, 
      *    or <code>null</code> if this object does not
      *    have an adapter for the given class
      */
-    public Object getAdapter(ClassInfo adapter);
+    public Object getAdapter(Class adapter);
 }

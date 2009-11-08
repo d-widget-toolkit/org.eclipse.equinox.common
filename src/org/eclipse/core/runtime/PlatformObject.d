@@ -4,18 +4,19 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.PlatformObject;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimePlatformObject;
 
 import java.lang.all;
 
-import org.eclipse.core.runtime.IAdaptable;
-// import org.eclipse.core.internal.runtime.AdapterManager;
+import org.eclipse.core.runtimeIAdaptable; // packageimport
+
+import org.eclipse.core.internal.runtime.AdapterManager;
 
 /**
  * An abstract superclass implementing the <code>IAdaptable</code>
@@ -29,7 +30,7 @@ import org.eclipse.core.runtime.IAdaptable;
  * of the {@link IAdapterManager} service. The method would look like:
  * <pre>
  *     public Object getAdapter(Class adapter) {
- *         IAdapterManager manager = ...;//lookup the IAdapterManager service
+ *         IAdapterManager manager = ...;//lookup the IAdapterManager service         
  *         return manager.getAdapter(this, adapter);
  *     }
  * </pre>
@@ -47,7 +48,7 @@ public abstract class PlatformObject : IAdaptable {
      * Constructs a new platform object.
      */
     public this() {
-//         super();
+        super();
     }
 
     /**
@@ -67,9 +68,7 @@ public abstract class PlatformObject : IAdaptable {
      * @return the adapted object or <code>null</code>
      * @see IAdaptable#getAdapter(Class)
      */
-    public Object getAdapter(ClassInfo adapter) {
-        implMissing( __FILE__, __LINE__ );
-        return null;
-//         return AdapterManager.getDefault().getAdapter(this, adapter);
+    public Object getAdapter(Class adapter) {
+        return AdapterManager.getDefault().getAdapter(this, adapter);
     }
 }

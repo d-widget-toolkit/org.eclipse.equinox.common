@@ -1,28 +1,31 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2006 IBM Corporation and others.
+ * Copyright (c) 2000, 2008 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.CoreException;
-
-import org.eclipse.core.runtime.IStatus;
-
-// import java.io.PrintStream;
-// import java.io.PrintWriter;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeCoreException;
 
 import java.lang.all;
+
+import org.eclipse.core.runtimeStatus; // packageimport
+import org.eclipse.core.runtimeIStatus; // packageimport
+
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
+import org.eclipse.core.internal.runtime.PrintStackUtil;
 
 /**
  * A checked exception representing a failure.
  * <p>
- * Core exceptions contain a status object describing the
+ * Core exceptions contain a status object describing the 
  * cause of the exception.
  * </p><p>
  * This class can be used without OSGi running.
@@ -34,7 +37,7 @@ public class CoreException : Exception {
     /**
      * All serializable objects should have a stable serialVersionUID
      */
-    private static const long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /** Status object. */
     private IStatus status;
@@ -52,11 +55,11 @@ public class CoreException : Exception {
 
     /**
       * Returns the cause of this exception, or <code>null</code> if none.
-      *
+      * 
       * @return the cause for this exception
       * @since 3.4
       */
-    public Exception getCause() {
+    public Throwable getCause() {
         return status.getException();
     }
 
@@ -83,55 +86,34 @@ public class CoreException : Exception {
      * its Status object.
      */
     public void printStackTrace() {
-//         printStackTrace(System.err);
-        getDwtLogger.error( __FILE__, __LINE__, "Exception in File {}({}): {}", this.file, this.line, this.msg );
-        foreach( msg; this.info ){
-            getDwtLogger.error( __FILE__, __LINE__, "    trc: {}", msg );
-        }
-        if (status.getException() !is null) {
-            getDwtLogger.error( __FILE__, __LINE__, "{}[{}]: ", this.classinfo.name, status.getCode() ); //$NON-NLS-1$ //$NON-NLS-2$
-//             status.getException().printStackTrace();
-                auto e = status.getException();
-                getDwtLogger.error( __FILE__, __LINE__, "Exception in File {}({}): {}", e.file, e.line, e.msg );
-                foreach( msg; e.info ){
-                    getDwtLogger.error( __FILE__, __LINE__, "    trc: {}", msg );
-                }
+        printStackTrace(System.err);
+    }
+
+    /**
+     * Prints a stack trace out for the exception, and
+     * any nested exception that it may have embedded in
+     * its Status object.
+     * 
+     * @param output the stream to write to
+     */
+    public void printStackTrace(PrintStream output) {
+        synchronized (output) {
+            super.printStackTrace(output);
+            PrintStackUtil.printChildren(status, output);
         }
     }
 
-//FIXME
-//     /**
-//      * Prints a stack trace out for the exception, and
-//      * any nested exception that it may have embedded in
-//      * its Status object.
-//      *
-//      * @param output the stream to write to
-//      */
-//     public void printStackTrace(PrintStream output) {
-//         synchronized (output) {
-//             super.printStackTrace(output);
-//             if (status.getException() !is null) {
-//                 output.print(getClass().getName() + "[" + status.getCode() + "]: "); //$NON-NLS-1$ //$NON-NLS-2$
-//                 status.getException().printStackTrace(output);
-//             }
-//         }
-//     }
-//
-//     /**
-//      * Prints a stack trace out for the exception, and
-//      * any nested exception that it may have embedded in
-//      * its Status object.
-//      *
-//      * @param output the stream to write to
-//      */
-//     public void printStackTrace(PrintWriter output) {
-//         synchronized (output) {
-//             super.printStackTrace(output);
-//             if (status.getException() !is null) {
-//                 output.print(getClass().getName() + "[" + status.getCode() + "]: "); //$NON-NLS-1$ //$NON-NLS-2$
-//                 status.getException().printStackTrace(output);
-//             }
-//         }
-//     }
-
+    /**
+     * Prints a stack trace out for the exception, and
+     * any nested exception that it may have embedded in
+     * its Status object.
+     * 
+     * @param output the stream to write to
+     */
+    public void printStackTrace(PrintWriter output) {
+        synchronized (output) {
+            super.printStackTrace(output);
+            PrintStackUtil.printChildren(status, output);
+        }
+    }
 }

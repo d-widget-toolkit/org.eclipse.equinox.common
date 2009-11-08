@@ -4,23 +4,24 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.Status;
-
-import org.eclipse.core.internal.runtime.IRuntimeConstants;
-import org.eclipse.core.internal.runtime.LocalizationUtils;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Assert;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeStatus;
 
 import java.lang.all;
 
+import org.eclipse.core.runtimeAssert; // packageimport
+import org.eclipse.core.runtimeIStatus; // packageimport
+
+import org.eclipse.core.internal.runtime.IRuntimeConstants;
+import org.eclipse.core.internal.runtime.LocalizationUtils;
+
 /**
- * A concrete status implementation, suitable either for
+ * A concrete status implementation, suitable either for 
  * instantiating or subclassing.
  * <p>
  * This class can be used without OSGi running.
@@ -33,19 +34,13 @@ public class Status : IStatus {
      *
      * @since 3.0
      */
-    public static const IStatus OK_STATUS;
+    public static final IStatus OK_STATUS = new Status(OK, IRuntimeConstants.PI_RUNTIME, OK, LocalizationUtils.safeLocalize("ok"), null); //$NON-NLS-1$
     /**
      * A standard CANCEL status with no message.
-     *
+     * 
      * @since 3.0
      */
-    public static const IStatus CANCEL_STATUS;
-
-    static this(){
-        OK_STATUS = new Status(OK, IRuntimeConstants.PI_RUNTIME, OK, LocalizationUtils.safeLocalize("ok"), null); //$NON-NLS-1$
-        CANCEL_STATUS = new Status(CANCEL, IRuntimeConstants.PI_RUNTIME, 1, "", null); //$NON-NLS-1$
-    }
-
+    public static final IStatus CANCEL_STATUS = new Status(CANCEL, IRuntimeConstants.PI_RUNTIME, 1, "", null); //$NON-NLS-1$
     /**
      * The severity. One of
      * <ul>
@@ -72,25 +67,25 @@ public class Status : IStatus {
 
     /** Wrapped exception, or <code>null</code> if none.
      */
-    private Exception exception = null;
+    private Throwable exception = null;
 
     /** Constant to avoid generating garbage.
      */
-    private static const IStatus[] theEmptyStatusArray = null;
+    private static final IStatus[] theEmptyStatusArray = new IStatus[0];
 
     /**
      * Creates a new status object.  The created status has no children.
      *
-     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>,
+     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>, 
      * <code>INFO</code>, <code>WARNING</code>,  or <code>CANCEL</code>
      * @param pluginId the unique identifier of the relevant plug-in
      * @param code the plug-in-specific status code, or <code>OK</code>
      * @param message a human-readable message, localized to the
      *    current locale
      * @param exception a low-level exception, or <code>null</code> if not
-     *    applicable
+     *    applicable 
      */
-    public this(int severity, String pluginId, int code, String message, Exception exception) {
+    public this(int severity, String pluginId, int code, String message, Throwable exception) {
         setSeverity(severity);
         setPlugin(pluginId);
         setCode(code);
@@ -102,41 +97,41 @@ public class Status : IStatus {
      * Simplified constructor of a new status object; assumes that code is <code>OK</code>.
      * The created status has no children.
      *
-     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>,
+     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>, 
      * <code>INFO</code>, <code>WARNING</code>,  or <code>CANCEL</code>
      * @param pluginId the unique identifier of the relevant plug-in
      * @param message a human-readable message, localized to the
      *    current locale
      * @param exception a low-level exception, or <code>null</code> if not
      *    applicable
-     *
+     *     
      * @since org.eclipse.equinox.common 3.3
      */
-    public this(int severity, String pluginId, String message, Exception exception) {
+    public this(int severity, String pluginId, String message, Throwable exception) {
         setSeverity(severity);
         setPlugin(pluginId);
         setMessage(message);
         setException(exception);
-        setCode(OK);
+        setCodecast(OK);
     }
 
     /**
      * Simplified constructor of a new status object; assumes that code is <code>OK</code> and
      * exception is <code>null</code>. The created status has no children.
      *
-     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>,
+     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>, 
      * <code>INFO</code>, <code>WARNING</code>,  or <code>CANCEL</code>
      * @param pluginId the unique identifier of the relevant plug-in
      * @param message a human-readable message, localized to the
      *    current locale
-     *
+     *    
      * @since org.eclipse.equinox.common 3.3
      */
     public this(int severity, String pluginId, String message) {
         setSeverity(severity);
         setPlugin(pluginId);
         setMessage(message);
-        setCode(OK);
+        setCodecast(OK);
         setException(null);
     }
 
@@ -157,7 +152,7 @@ public class Status : IStatus {
     /* (Intentionally not javadoc'd)
      * Implements the corresponding method on <code>IStatus</code>.
      */
-    public Exception getException() {
+    public Throwable getException() {
         return exception;
     }
 
@@ -216,9 +211,9 @@ public class Status : IStatus {
      * Sets the exception.
      *
      * @param exception a low-level exception, or <code>null</code> if not
-     *    applicable
+     *    applicable 
      */
-    protected void setException(Exception exception) {
+    protected void setException(Throwable exception) {
         this.exception = exception;
     }
 
@@ -242,14 +237,14 @@ public class Status : IStatus {
      * @param pluginId the unique identifier of the relevant plug-in
      */
     protected void setPlugin(String pluginId) {
-        Assert.isLegal(pluginId !is null && pluginId.length > 0);
+        Assert.isLegal(pluginId !is null && pluginId.length() > 0);
         this.pluginId = pluginId;
     }
 
     /**
      * Sets the severity.
      *
-     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>,
+     * @param severity the severity; one of <code>OK</code>, <code>ERROR</code>, 
      * <code>INFO</code>, <code>WARNING</code>,  or <code>CANCEL</code>
      */
     protected void setSeverity(int severity) {
@@ -258,24 +253,34 @@ public class Status : IStatus {
     }
 
     /**
-     * Returns a string representation of the status, suitable
+     * Returns a string representation of the status, suitable 
      * for debugging purposes only.
      */
-    public override String toString() {
-        String sev;
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("Status "); //$NON-NLS-1$
         if (severity is OK) {
-            sev="OK"; //$NON-NLS-1$
+            buf.append("OK"); //$NON-NLS-1$
         } else if (severity is ERROR) {
-            sev="ERROR"; //$NON-NLS-1$
+            buf.append("ERROR"); //$NON-NLS-1$
         } else if (severity is WARNING) {
-            sev="WARNING"; //$NON-NLS-1$
+            buf.append("WARNING"); //$NON-NLS-1$
         } else if (severity is INFO) {
-            sev="INFO"; //$NON-NLS-1$
+            buf.append("INFO"); //$NON-NLS-1$
         } else if (severity is CANCEL) {
-            sev="CANCEL"; //$NON-NLS-1$
+            buf.append("CANCEL"); //$NON-NLS-1$
         } else {
-            sev=Format( "severity={}", severity);
+            buf.append("severity="); //$NON-NLS-1$
+            buf.append(severity);
         }
-        return Format("Status {}: {} code={} {} {}", sev, pluginId, code, message, exception.toString );
+        buf.append(": "); //$NON-NLS-1$
+        buf.append(pluginId);
+        buf.append(" code="); //$NON-NLS-1$
+        buf.append(code);
+        buf.append(' ');
+        buf.append(message);
+        buf.append(' ');
+        buf.append(exception);
+        return buf.toString();
     }
 }

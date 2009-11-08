@@ -4,15 +4,16 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
- * Port to the D programming language:
- *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
-module org.eclipse.core.runtime.IAdapterFactory;
+// Port to the D programming language:
+//     Frank Benoit <benoit@tionex.de>
+module org.eclipse.core.runtimeIAdapterFactory;
 
 import java.lang.all;
+
 
 /**
  * An adapter factory defines behavioral extensions for
@@ -36,12 +37,12 @@ public interface IAdapterFactory {
      * @param adaptableObject the adaptable object being queried
      *   (usually an instance of <code>IAdaptable</code>)
      * @param adapterType the type of adapter to look up
-     * @return a object castable to the given adapter type,
-     *    or <code>null</code> if this adapter factory
+     * @return a object castable to the given adapter type, 
+     *    or <code>null</code> if this adapter factory 
      *    does not have an adapter of the given type for the
      *    given object
      */
-    public Object getAdapter(Object adaptableObject, ClassInfo adapterType);
+    public Object getAdapter(Object adaptableObject, Class adapterType);
 
     /**
      * Returns the collection of adapter types handled by this
@@ -54,5 +55,5 @@ public interface IAdapterFactory {
      *
      * @return the collection of adapter types
      */
-    public ClassInfo[] getAdapterList();
+    public Class[] getAdapterList();
 }
